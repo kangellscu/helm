@@ -26,3 +26,11 @@ The container shouild exit successfully (exit 0) for a test to be considered a s
 The pod definition must contain one of the helm test hook annotations: `helm.sh/hook: test-success` or `helm.sh/hook: test-failure`.
 
 You can run the tests on a release using the command `helm test <RELEASE_NAME>`.
+
+```shell
+# Install chart
+$helm install stable/wordpress
+
+# Test <RELEASE>
+helm test <RELEASE_NAME>
+```
