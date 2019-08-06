@@ -4,6 +4,11 @@ You can use the [editor on GitHub](https://github.com/kangellscu/helm/edit/gh-pa
 
 Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
+### 添加到本地仓库
+```shell
+helm repo add kangell-charts https://kangellscu.github.io/helm
+```
+
 ### Markdown
 
 Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
