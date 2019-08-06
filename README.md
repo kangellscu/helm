@@ -4,10 +4,15 @@ You can use the [editor on GitHub](https://github.com/kangellscu/helm/edit/gh-pa
 
 Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
-### 添加到本地仓库
+### 仓库管理
 ```shell
+# 将远程仓库纳入管理
 helm repo add kangell-charts https://kangellscu.github.io/helm
+
+# 远程仓库有变更后，更新本地管理信息
+helm repo update
 ```
+Under the hood, the `helm repo add` and `helm repo update` commands are fetching the index.yaml file and storing them in the `$HELM_HOME/repository/cache/` directory. This is where the `helm search` command finds infomation about charts.
 
 ### Markdown
 
