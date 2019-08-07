@@ -1,9 +1,10 @@
 # Helm Chart for lnmp server with repo
 
 [lnmp server with repo] provide a lnmp runtime, which include some components, as below:
-1. [Web server]: nginx
-2. [Application server]: php-fpm
-3. [Database]: mariadb or mongodb (dababase can enable in value.yaml, default disabled)
+
+1. ***Web server***: nginx
+2. ***Application server***: php-fpm
+3. ***Database***: mariadb or mongodb (dababase can enable in value.yaml, default disabled)
 Note: serve content init from a specified repo url (specified in value.yaml)
 
 #### Configuration
