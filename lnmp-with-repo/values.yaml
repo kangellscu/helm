@@ -1,0 +1,117 @@
+# Default values for lnmp-with-repo.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: nginx
+  tag: stable
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+
+  ## Set this to true in order to add the corresponding annotations for cert-manager
+  certManager: false
+
+  ## Ingress annotations done as key:value pairs
+  ## For a full list of possible ingress annotations, please see
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/annotations.md
+  ##
+  ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true"
+  ##    will automatically be set
+  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true"
+  ##    will automatically be set
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: example.local
+      paths:
+        - /
+
+  ## The tls configuration for the ingress
+  ## ee: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  tls: []
+  #  - secretName: example.local-tls
+  #    hosts:
+  #      - example.local
+
+  secrets:
+  ## If you're providing your own certificates, please use this to add the certificates as secrets
+  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
+  ##    -----BEGIN RSA PRIVATE KEY-----
+  ##
+  ## name should line up with a tlsSecret set further up
+  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
+  ##
+  ## It is also possible to create and manage the certificates outside of this helm chart
+  ## Please see README.md for more information
+  # - name: example.local-tls
+  #   key:
+  #   certificate:
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+sourceRepo:
+    enabled: false
+    # url:
+    # branch:
+
+############################################
+# Dependencies
+############################################
+mariadb:
+    ## Whether to deploy a mariadb server to satisfy the applications database requirements.
+    ## To use an external database set this to false
+    enabled: true
+    ## Disable MariaDB replication
+    replication:
+        enabled: false
+
+    ## Create a database and a database user
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
+    ##
+    # rootUser
+    #   password
+
+    ## Enable persistence using Persistent Volume Claims
+    ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+    ##
+    master:
+        persistence:
+            enabled: true
+            ## mariadb data Persistent Volume Storage Class
+            ## If defined, storageClassName: <storageClass>
+            ## If set to "-", storageClassName: "", which disable dynamic provisioning
+            ## If undefined (the default) or set to null, no storageClassName spec is set,
+            ##  choosing the default provisioner. (gp2 on AWS, standard on GKE, AWS)
+            ##
+            # storageClass: "-"
+            accessMode: ReadWriteOnce
+            size: 8Gi

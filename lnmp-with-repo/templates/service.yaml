@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "lnmp-with-repo.fullname" . }}
+  labels:
+{{ include "lnmp-with-repo.labels" . | indent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: {{ include "lnmp-with-repo.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
