@@ -1,0 +1,97 @@
+# This file is optional.
+# Listing dependencies for the chart. Each item stands for a subchart.
+#
+# Docs: https://helm.sh/docs/developing_charts/#charts
+#
+# ##########################
+# Item breif description
+# ##########################
+# name: name of the subchart you want
+# version: the version of the subchart you want
+# repository: full URL to the subchart repository.a Note that you must also use
+#             "helm repo add" to add the repo locally. 
+#
+# ##########################
+# tags & condition for loading control
+# ##########################
+# All charts are loaded by default if tags & condition fields are not exist.
+# When tags & condition are present, they will be evaluated and used to control
+# loading for subcharts they are applied to.
+# 
+# note: 1) If condition conflict with tags, the condition win.
+#       2) The first condition path that exists wins and subsequent ones for that
+#          chart are ignored.
+#       3) Tags an conditions values must be set in the top parent's values.
+#       4) Tags are evaluated as "if any of the chart's tags are true then enable the chart".
+#
+# condition: YAML paths (delimited by commas) list, 
+#            eg: subchart1.enabled,global.subchart1.enabled
+#            1) if path exists in the top parent's values and resolves to boolean value,
+#            it's valid;
+#            2) only the first valid path found in the list is evaluated (shortcut mode),
+#            if all paths invalid or no paths exists, the condition has no effect;
+#            3) if condition can be evaluated, the subchart will be enabled or disabled
+#            based on the boolean value.
+# tags: labels to associate with this subchart. In the top parents' values, all charts
+#            with tags can be enabled or disabled by specifing the tag and a boolean value.
+#            eg:
+#            in lnmp-with-repo/requirements.yaml
+#            dependencies:
+#            - name: subchart1
+#              tags:
+#              - front-end
+#              - subchart1
+#
+#            in lnmp-with-repo/values.yaml
+#            subchart1:
+#              enabled: true
+#            tags:
+#              front-end: false
+#
+#            note: In the above example all charts with the tag `front-end` would be
+#                  disabled but since the `subchart1.enabled` path evaluated to "true"
+#                  in the parent's values, the condition will OVERRIDE the tag and
+#                  `subchart1` subchart will be enabled
+#            
+#
+# ##########################
+# helm dep up
+# ##########################
+# Once you created/updated this file, you can run "helm dependency update <subchart-name>"
+# and then it will use this file to download all specified charts into `charts/`
+# directory for you. (Directory charts/ will be created if not exists).
+# When you run "helm dependency update", you can see:
+# lnmp-with-repo/
+#   requirements.ymal
+#   charts/
+#     mariadb-1.2.3.tgz
+#     redis-1.2.3.tgz
+
+dependencies:
+- name: stable/mariadb
+  version: ~6.8.5
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  condition: mariadb.enabled
+  tags:
+  - database
+
+- name: stable/mongodb-replicaset
+  version: ~0.21.0
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  condition: mongodb.enabled
+  tags:
+  - database
+
+- name: redis
+  version: 9.1.5
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  condition: redis.enabled
+  tags:
+    - cache
+
+- name: beanstalkd
+  version: {}
+  repository:
+  condition: beanstalkd.enabled
+  tags:
+    - mq-broker

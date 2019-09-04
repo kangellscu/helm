@@ -5,6 +5,8 @@
 1. ***Web server***: nginx
 2. ***Application server***: php-fpm
 3. ***Database***: mariadb or mongodb (dababase can enable in value.yaml, default disabled)
+4. ***Cache*** redis (cache can enable in value.yaml, default disabled)
+5. ***Message Queue*** redis or beanstalkd (message queue can enable in value.yaml, default disabled)
 Note: serve content init from a specified repo url (specified in value.yaml)
 
 #### Configuration

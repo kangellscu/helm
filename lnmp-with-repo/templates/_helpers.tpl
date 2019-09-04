@@ -1,3 +1,26 @@
+{{/*
+In the `templates/` directory, any file that begin with an _ is not expected to
+output a k8s manifest file.
+By convention, macro are placed in a `_helpers.tpl` file
+
+Instructures:
+1. define: create a named macro
+   eg: {{- define "mychart.labels" }}
+2. template: use a named macro (inline expand). When a named macro is rendered, it will receive
+   the scope passed in by `template` call.
+   format: template macro-name <scope> (scope is optional)
+   eg: {{- template "mychart.labels" }}
+       {{- template "mychart.labels" . }}  pass top-level scope in macro
+3. include: an alternative to `template`, which can do more thing. `include` support pipeline to
+            control format.
+   eg: {{- include "mychart.labels" . | nindent 4 }}
+
+Notes:
+1. Macro name are ***global*** (macro in subcharts are compiled together with top-level template macro).
+2. Best practice of macro name, prefix each defined macro with the name of the chart.
+   eg: {{ define "lnmp-with-repo" }}
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 {{/*
 Expand the name of the chart.
