@@ -1,0 +1,12 @@
+apiVersion: v1
+name: lnmp
+version: 0.1.0
+appVersion: "1.0"
+description: A Helm chart for Kubernetes
+keywords:
+- nginx
+- php-fpm
+maintainers:
+- name: Kangell
+  email: leikou@163.com
+engine: gotpl

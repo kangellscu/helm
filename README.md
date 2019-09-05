@@ -33,4 +33,7 @@ $helm install stable/wordpress
 
 # Test <RELEASE>
 helm test <RELEASE_NAME>
+
+# Updrade release
+helm upgrade <RELEASE_NAME> chart [flags]
 ```

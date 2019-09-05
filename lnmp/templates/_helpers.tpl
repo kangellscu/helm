@@ -18,14 +18,14 @@ Instructures:
 Notes:
 1. Macro name are ***global*** (macro in subcharts are compiled together with top-level template macro).
 2. Best practice of macro name, prefix each defined macro with the name of the chart.
-   eg: {{ define "lnmp-with-repo" }}
+   eg: {{ define "lnmp" }}
 */}}
 
 {{/* vim: set filetype=mustache: */}}
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "lnmp-with-repo.name" -}}
+{{- define "lnmp.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
@@ -34,7 +34,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "lnmp-with-repo.fullname" -}}
+{{- define "lnmp.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -50,16 +50,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "lnmp-with-repo.chart" -}}
+{{- define "lnmp.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Common labels
 */}}
-{{- define "lnmp-with-repo.labels" -}}
-app.kubernetes.io/name: {{ include "lnmp-with-repo.name" . }}
-helm.sh/chart: {{ include "lnmp-with-repo.chart" . }}
+{{- define "lnmp.labels" -}}
+app.kubernetes.io/name: {{ include "lnmp.name" . }}
+helm.sh/chart: {{ include "lnmp.chart" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}

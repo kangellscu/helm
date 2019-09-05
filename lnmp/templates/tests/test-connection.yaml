@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "lnmp.fullname" . }}-test-connection"
+  labels:
+{{ include "lnmp.labels" . | indent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args:  ['{{ include "lnmp.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never

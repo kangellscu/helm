@@ -1,0 +1,12 @@
+dependencies:
+- name: mariadb
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 6.8.5
+- name: mongodb-replicaset
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 3.9.6
+- name: redis
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 9.1.5
+digest: sha256:8733923d179d618b4e50b8426e8682585536354c32fe6d8b10f9d71fe853a7ff
+generated: "2019-09-04T16:33:16.039751+08:00"

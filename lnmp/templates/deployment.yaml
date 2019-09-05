@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "lnmp.fullname" . }}
+  labels:
+{{ include "lnmp.labels" . | indent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "lnmp.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "lnmp.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      initContainers:
+      # Fetch source
+      - name: init-project-source
+        image: busybox
+        command: ["echo", "hello world"]
+        volumeMounts:
+        - name: project-data
+          mountPath: /project/source
+          subPath: source
+      containers:
+        # nginx
+        - name: {{ .Chart.Name }}
+          image: "nginx:{{ .Values.image.nginxTag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+          - name: http
+            containerPort: 80
+            protocol: TCP
+          volumeMounts:
+          - name: project-data
+            mountPath: /www/source
+            subPath: source 
+          - name: project-data
+            mountPath: /var/lib/logs
+            subPath: logs/nginx
+          - name: config-volume
+            mountPath: /etc/nginx/nginx.conf
+            subPath: nginx.conf
+          - name: config-volume
+            mountPath: /etc/nginx/conf.d/site.conf
+            subPath: site.conf
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+        # php-fpm
+        - name: {{ .Chart.Name }}-fpm
+          image: "bitnami/php-fpm:{{ .Values.image.fpmTag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+          - name: fpm
+            containerPort: 9000
+            protocol: TCP
+          volumeMounts:
+          - name: project-data
+            mountPath: /www/source
+            subPath: source
+          - name: project-data
+            mountPath: /var/lib/fpm
+            subPath: logs/fpm
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+
+      volumes:
+      - name: project-data
+        emptyDir: {}
+      - name: config-volume
+        configMap: 
+          name: {{ include "lnmp.fullname" . }}-config
+
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}

@@ -35,14 +35,14 @@
 # tags: labels to associate with this subchart. In the top parents' values, all charts
 #            with tags can be enabled or disabled by specifing the tag and a boolean value.
 #            eg:
-#            in lnmp-with-repo/requirements.yaml
+#            in lnmp/requirements.yaml
 #            dependencies:
 #            - name: subchart1
 #              tags:
 #              - front-end
 #              - subchart1
 #
-#            in lnmp-with-repo/values.yaml
+#            in lnmp/values.yaml
 #            subchart1:
 #              enabled: true
 #            tags:
@@ -61,37 +61,30 @@
 # and then it will use this file to download all specified charts into `charts/`
 # directory for you. (Directory charts/ will be created if not exists).
 # When you run "helm dependency update", you can see:
-# lnmp-with-repo/
+# lnmp/
 #   requirements.ymal
 #   charts/
 #     mariadb-1.2.3.tgz
 #     redis-1.2.3.tgz
 
 dependencies:
-- name: stable/mariadb
+- name: mariadb
   version: ~6.8.5
   repository: https://kubernetes-charts.storage.googleapis.com/
   condition: mariadb.enabled
   tags:
   - database
 
-- name: stable/mongodb-replicaset
-  version: ~0.21.0
+- name: mongodb-replicaset
+  version: ~3.9.6
   repository: https://kubernetes-charts.storage.googleapis.com/
   condition: mongodb.enabled
   tags:
   - database
 
 - name: redis
-  version: 9.1.5
+  version: ~9.1.5
   repository: https://kubernetes-charts.storage.googleapis.com/
   condition: redis.enabled
   tags:
     - cache
-
-- name: beanstalkd
-  version: {}
-  repository:
-  condition: beanstalkd.enabled
-  tags:
-    - mq-broker
