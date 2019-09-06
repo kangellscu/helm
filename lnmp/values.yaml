@@ -25,7 +25,7 @@ service:
   port: 80
 
 ingress:
-  enabled: false
+  enabled: true
 
   ## Set this to true in order to add the corresponding annotations for cert-manager
   certManager: false
