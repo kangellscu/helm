@@ -6,6 +6,9 @@ tags:
   database: false
   cache: false
 
+global:
+  versionConfig: "1567674999"
+
 replicaCount: 1
 
 image:

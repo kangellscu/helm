@@ -15,6 +15,9 @@ spec:
       labels:
         app.kubernetes.io/name: {{ include "lnmp.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+      annotations:
+        # In order to force deployment updated
+        version/config: "{{ .Values.global.versionConfig }}"
     spec:
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -49,16 +52,16 @@ spec:
             mountPath: /etc/nginx/nginx.conf
             subPath: nginx.conf
           - name: config-volume
-            mountPath: /etc/nginx/conf.d/site.conf
+            mountPath: /etc/nginx/conf.d/default.conf
             subPath: site.conf
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
+          #livenessProbe:
+          #  httpGet:
+          #    path: /
+          #    port: http
+          #readinessProbe:
+          #  httpGet:
+          #    path: /
+          #    port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
         # php-fpm
@@ -74,8 +77,18 @@ spec:
             mountPath: /www/source
             subPath: source
           - name: project-data
-            mountPath: /var/lib/fpm
-            subPath: logs/fpm
+            mountPath: /opt/bitnami/php/logs
+            subPath: logs/php-fpm
+          - name: config-volume
+            mountPath: /opt/bitnami/php/etc/php.ini
+            subPath: php.ini
+          - name: config-volume
+            mountPath: /opt/bitnami/php/etc/php-fpm.conf
+            subPath: php-fpm.conf
+          - name: config-volume
+            mountPath: /opt/bitnami/php/etc/php-fpm.d/www.conf
+            subPath: php-fpm-www.conf
+
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
 

@@ -1,3 +1,8 @@
+# Notes:
+# 1. 使用ConfigMap挂载的ENV不会更新
+# 2. 使用ConfigMap挂载的Volume重的数据需要一段时间才能同步更新
+# 3. 使用subPath挂载的Volume文件内容不会更新
+# 4. 推荐使用修改pod annotations的方式强制触发rollout
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -13,4 +18,10 @@ data:
   site.conf: |-
   {{- .Files.Get "configfiles/files/nginx-sites.conf" | indent 4 }}
 
-  # phpfpm config
+  # php
+  php.ini: |-
+  {{- .Files.Get "configfiles/files/php.ini" | indent 4 }}
+  php-fpm.conf: |-
+  {{- .Files.Get "configfiles/files/php-fpm.conf" | indent 4 }}
+  php-fpm-www.conf: |-
+  {{- .Files.Get "configfiles/files/php-fpm-www.conf" | indent 4 }}
