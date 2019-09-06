@@ -20,6 +20,12 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+volumes:
+  projectData:
+    # available type: emptyDir, hostPath 
+    type: hostPath
+    hostPath: /tmp/helm/project-data
+
 service:
   type: ClusterIP
   port: 80

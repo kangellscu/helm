@@ -94,7 +94,13 @@ spec:
 
       volumes:
       - name: project-data
+        {{- if eq .Values.volumes.projectData.type "emptyDir" }}
         emptyDir: {}
+        {{ else }}
+        hostPath:
+          path: {{ .Values.volumes.projectData.hostPath }}
+          type: Directory
+        {{- end }}
       - name: config-volume
         configMap: 
           name: {{ include "lnmp.fullname" . }}-config
